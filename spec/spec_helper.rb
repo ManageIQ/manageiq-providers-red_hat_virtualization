@@ -12,8 +12,5 @@ VCR.configure do |config|
   config.ignore_hosts 'codeclimate.com' if ENV['CI']
   config.cassette_library_dir = File.join(ManageIQ::Providers::Redhat::Engine.root, 'spec/vcr_cassettes')
 
-  secrets = Rails.application.secrets
-  secrets.redhat.each_key do |secret|
-    config.define_cassette_placeholder(secrets.redhat_defaults[secret]) { secrets.redhat[secret] }
-  end
+  VcrSecrets.define_all_cassette_placeholders(config, :redhat)
 end
